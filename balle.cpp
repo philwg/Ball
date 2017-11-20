@@ -9,32 +9,31 @@ using namespace std;
 
 
 /* ------------------------------------------------------------------- */
-/*				Les variables globales de la classe			   		   */
+/*		Les variables globales de la classe   		       */
 /* ------------------------------------------------------------------- */
 
-char presse;										// Le caractère lu au clavier
-GLint xold, yold, anglex, angley;					// Les contrôles des éléments gérés à la souris
+char presse;						// Le caractère lu au clavier
+GLint xold, yold, anglex, angley;			// Les contrôles des éléments gérés à la souris
 GLdouble angleScene {5.0}, angleBalle {0.0};		// Les angles de rotation des sous-scènes	
 
 GLdouble minx {-7.0}, miny { -2.0}, minz {-7.0};	// Les paramètres min de la fenêtre de vue ...
 GLdouble maxx {+7.0}, maxy {+12.0}, maxz {+7.0};	// Les paramètres max de la fenêtre de vue ...
 
-GLdouble Ball[4][4]	{0.0, 0.0, 0.0, 0.0,			// Les paramètres de rotation de la balle
-	 				 1.0, 1.0, 1.0, 0.6,			// Les paramètres d'échelle et le rayon
-					 0.0, 0.0, 0.0, 36.0,			// Les paramètres de translation et la finesse du tracé
-					 1.0, 0.0, 1.0, 0.0};			// Les paramètres de couleur et la distance au sol
+GLdouble Ball[4][4] {0.0, 0.0, 0.0, 0.0,		// Les paramètres de rotation de la balle
+	 	     1.0, 1.0, 1.0, 0.6,		// Les paramètres d'échelle et le rayon
+		     0.0, 0.0, 0.0, 36.0,		// Les paramètres de translation et la finesse du tracé
+		     1.0, 0.0, 1.0, 0.0};		// Les paramètres de couleur et la distance au sol
 					  							
-const GLdouble	sFactorMax 		{PHI},				// La limite d'étirement
-				sFactorMin 		{PHI-1.0},			// la limite d'écrasement
-				deltaZ 	   		{0.25},				// l'incrément de zoom de la fenêtre de vue
-				dispMaxHeight	{9.0};				// l'amplitude du rebond
+const GLdouble	sFactorMax      {PHI},			// La limite d'étirement
+		sFactorMin 	{PHI-1.0},		// la limite d'écrasement
+		deltaZ 	   	{0.25},			// l'incrément de zoom de la fenêtre de vue
+		dispMaxHeight	{9.0};			// l'amplitude du rebond
 
-GLint crntIndex {0}, rangeMax {120};				// les contrôles du rebond
-GLdouble factorUp, factorDown, chapSize;			//
-
+GLint crntIndex {0}, rangeMax {120};			// les contrôles du rebond
+GLdouble factorUp, factorDown, chapSize;
 
 /* ------------------------------------------------------------------- */
-/*						Prototypes des fonctions	   				   */
+/*			Prototypes des fonctions	   	       */
 /* ------------------------------------------------------------------- */
 
 void drawSol();
@@ -59,7 +58,7 @@ void affichage();
 
 
 /* ------------------------------------------------------------------- */
-/*						Fonctions de Tracé			   				   */
+/*			Fonctions de Tracé			       */
 /* ------------------------------------------------------------------- */
 
 void drawSol()		//--------------------------------------- Dessine un rectangle pour symboliser le sol
@@ -76,10 +75,10 @@ void drawSol()		//--------------------------------------- Dessine un rectangle p
 void drawBall() 	//--------------------------------------- Le tracé de la balle
 {
 	glPushMatrix();
-		glColor3d		(Ball[3][0], Ball[3][1], Ball[3][2]); 					// Sa couleur
-		glTranslated	(Ball[2][0], Ball[2][1], Ball[2][2]);					// Ses translations
-		glScaled		(Ball[1][0], Ball[1][1], Ball[1][2]);					// Ses échelles
-		glRotated		(Ball[0][0], Ball[0][1], Ball[0][2], Ball[0][3]);		// Sa rotation
+		glColor3d	(Ball[3][0], Ball[3][1], Ball[3][2]); 				// Sa couleur
+		glTranslated	(Ball[2][0], Ball[2][1], Ball[2][2]);				// Ses translations
+		glScaled	(Ball[1][0], Ball[1][1], Ball[1][2]);				// Ses échelles
+		glRotated	(Ball[0][0], Ball[0][1], Ball[0][2], Ball[0][3]);		// Sa rotation
 		glutSolidSphere	(Ball[1][3], round(Ball[2][3]), round(Ball[2][3]));		// L'objet lui-même
 	glPopMatrix();
 }
@@ -89,37 +88,37 @@ void ballScene()	//------------------------------------------- la structure Open
 	glPushMatrix();
 	
 		glRotated(angleScene, 1.0, 1.0, 1.0);		//--- Préparer la rotation de la scene
-		drawSol();									//--- Le sol
-		glTranslated(0.0, Ball[1][3], 0.0);			//--- Translation vers la scène (balle au sol)
+		drawSol();					//--- Le sol
+		glTranslated(0.0, Ball[1][3], 0.0);		//--- Translation vers la scène (balle au sol)
 		
 		glPushMatrix();
-			glRotatef(angleBalle, 0.0, 0.0, 1.0);			//--- Préparer la rotation de la balle
-			glTranslated(0.0, Ball[3][3], 0.0);				//--- Translation vers la balle
-			drawBall();										//--- La balle
+			glRotatef(angleBalle, 0.0, 0.0, 1.0);	//--- Préparer la rotation de la balle
+			glTranslated(0.0, Ball[3][3], 0.0);	//--- Translation vers la balle
+			drawBall();				//--- La balle
 		glPopMatrix();
 		
 	glPopMatrix();	
 }
 
 /* ------------------------------------------------------------------- */
-/*							Fonction IDLE						       */
+/*			Fonction IDLE				       */
 /* ------------------------------------------------------------------- */
 
 void idle()		//------------------------------------------- Définition du rebond comme tâche de fond
 {
 	if (true) {
-		if (crntIndex > rangeMax) {					//------- si le compteur dépasse le maximum
-			crntIndex = 0;							//-------	on le fait boucler à zéro
-			setSSParams(sFactorMin);				//------- 	on repart de la boule écrasée au sol
+		if (crntIndex > rangeMax) {		//------- si le compteur dépasse le maximum
+			crntIndex = 0;			//-------	on le fait boucler à zéro
+			setSSParams(sFactorMin);	//------- 	on repart de la boule écrasée au sol
 		}
-		moveBalle();								//------- on calcule la position suivante
-		crntIndex++;								//------- on augmente l'incrément
+		moveBalle();				//------- on calcule la position suivante
+		crntIndex++;				//------- on augmente l'incrément
 	}
 	glutPostRedisplay();
 }
 
 /* ------------------------------------------------------------------- */
-/*					Fonction de Redimensionnement				       */
+/*			Fonction de Redimensionnement		       */
 /* ------------------------------------------------------------------- */
 
 void reshape(int width, int height)		//------------------- Pour s'adapter aux redimensionnement de la fenêtre
@@ -134,7 +133,7 @@ void reshape(int width, int height)		//------------------- Pour s'adapter aux re
 
 
 /* ------------------------------------------------------------------- */
-/*					Fonctions de Gestion de la Souris			       */
+/*		Fonctions de Gestion de la Souris		       */
 /* ------------------------------------------------------------------- */
 
 void mouse(int button, int state, int x, int y)	//----------- Gestion du clic de la souris
@@ -161,7 +160,7 @@ void mousemotion(int x, int y)	//--------------------------- Gestion du mouvemen
 
 
 /* ------------------------------------------------------------------- */
-/*					Fonctions de Gestion du clavier			       	   */
+/*		Fonctions de Gestion du clavier			       */
 /* ------------------------------------------------------------------- */
 
 void zoomIO(GLdouble d)		//------------------------------- Mise à jour des paramètres de zoom
@@ -215,20 +214,20 @@ void moveBalle()		//----------------------------------- Gestion du déplacement 
 {
 	Ball[3][3] = getNewHeight();
 	
-	if (crntIndex<chapSize) {									// Premier douzième (au sol) :
-		updateSSParams(sqr(factorUp));							//		la balle s'étire
+	if (crntIndex<chapSize) {					// Premier douzième (au sol) :
+		updateSSParams(sqr(factorUp));				// la balle s'étire
 	}
 	if ((crntIndex>=chapSize)&&(crntIndex<=(5*chapSize))) {		// jusqu'au 5 douzièmes (en élévation) :
-		updateSSParams(sqrt(sqrt(factorDown)));					//		la balle reprend progressivement sa forme
+		updateSSParams(sqrt(sqrt(factorDown)));			// la balle reprend progressivement sa forme
 	}
 	if ((crntIndex>(5*chapSize))&&(crntIndex<(7*chapSize))) {	// jusqu'au 7 douzièmes (passage du sommet) :
-		setSSParams(1.0);										//		la balle est ronde
+		setSSParams(1.0);					// la balle est ronde
 	}
-	if ((crntIndex>=(7*chapSize))&&(crntIndex<(11*crntIndex))) {// jusqu'au 11 douzième (la descente) :
-		updateSSParams(sqrt(sqrt(factorUp)));					//		la balle s'étire
+	if ((crntIndex>=(7*chapSize))&&(crntIndex<(11*crntIndex))) {	// jusqu'au 11 douzième (la descente) :
+		updateSSParams(sqrt(sqrt(factorUp)));			// la balle s'étire
 	}
-	if (crntIndex>=(11*chapSize)) {								// dernier douzième (au sol) :
-		updateSSParams(sqr(factorDown));						// 		la balle s'écrase
+	if (crntIndex>=(11*chapSize)) {					// dernier douzième (au sol) :
+		updateSSParams(sqr(factorDown));			// la balle s'écrase
 	}
 }
 
@@ -283,7 +282,7 @@ void clavier(unsigned char touche, int x, int y)	//------- Gestion des saisies c
 
 
 /* ------------------------------------------------------------------- */
-/*			Fonctions display d'OpenGL & de lancement			       */
+/*		Fonctions display d'OpenGL & de lancement	       */
 /* ------------------------------------------------------------------- */
 
 void affichage()	//--------------------------------------- Gestion de l'affichage
@@ -321,11 +320,11 @@ int main(int argc, char** argv)		//----------------------- Fonction de lancement
 	glLineWidth(2.0);
 	glEnable(GL_DEPTH_TEST);
 	
-	crntIndex = 0;									//------- Initialisation de l'incrément à 0
-	chapSize = rangeMax/12.0;						//------- Calcul de la taille d'un douzième dans le range
-	factorUp = pow(sFactorMax,1/chapSize);			//------- Calcul du facteur d'étirement pour un incrément
-	factorDown = pow(sFactorMin,1/chapSize);		//------- 	"	  "		"	d'écrasement  "   "     "
-	setSSParams(sFactorMin);						//------- La balle est écrasée au sol au départ
+	crntIndex = 0;					//------- Initialisation de l'incrément à 0
+	chapSize = rangeMax/12.0;			//------- Calcul de la taille d'un douzième dans le range
+	factorUp = pow(sFactorMax,1/chapSize);		//------- Calcul du facteur d'étirement pour un incrément
+	factorDown = pow(sFactorMin,1/chapSize);	//------- 	"	  "		"	d'écrasement
+	setSSParams(sFactorMin);			//------- La balle est écrasée au sol au départ
 	
 	/* Enregistrement des fonctions de rappel */
 	glutDisplayFunc(affichage);
