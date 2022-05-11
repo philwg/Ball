@@ -1,0 +1,25 @@
+Ce programme présente une balle déformable rebondissante avec des commandes clavier:
+
+	R/r
+		- le 'R' (majuscule) permet d'augmenter le rayon
+		- le 'b' (minuscule) permet de diminuer le rayon	
+	Autres :
+		- 'q' permet de quitter
+		- 's' fait apparaître la scène en mode de rendu "sommets"
+		- 'f' fait apparaître la scène en mode de rendu filiaire
+		- 'p' fait apparaître la scène en mode de rendu plein
+	Z/z
+		- le 'Z' (majuscule) permet de zoomer
+		- le 'z' (minuscule) permet de dé-zoomer
+		
+Les mouvements de la souris avec le bouton gauche pressé permettent de faire
+bouger la vue.
+
+Conformément à la commande, l'effet de "Squash & Stretch" à volume constant
+est géré avec adaptation automatique des deux autres dimensions à celle qui
+est étirée (ici -> y).
+
+J'ai testé d'autres découpages plus ou moins éxotiques de la séquence mais 
+sans qu'ils soient pleinement satisfaisants (bien que je ne sache pas dire
+pourquoi exactement), c'est celui-là qui m'a paru le plus présentable avec
+un delay pour fluidifier la vue.
